@@ -1,0 +1,9 @@
+.dashboard .balance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard .balance span {
+    padding: 1rem;
+}

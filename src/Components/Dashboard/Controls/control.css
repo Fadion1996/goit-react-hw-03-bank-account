@@ -1,0 +1,30 @@
+.dashboard .controls {
+    height: 10rem;
+    background-color: #062b55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard .controls input {
+    margin: 0 1rem;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 13px 26px;
+    border-radius: 4px;
+}
+
+.dashboard .controls button {
+    margin: 0 1rem;
+}
+
+/* Hide HTML5 Up and Down arrows. */
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
