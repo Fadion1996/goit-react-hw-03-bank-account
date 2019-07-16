@@ -26,16 +26,12 @@ export default class MoviePage extends Component {
                 type = 'Deposit';
                 this.setState({balance: balance + parseInt(value)})
                 this.setState({deposit: deposit + parseInt(value)});
-                localStorage.setItem('balance', balance);
-                localStorage.setItem('deposit', deposit);
             } else {
                 type = 'Withdrawal';
-                if (balance - parseInt(value) < 0 || (parseInt(localStorage.getItem('balance')) - parseInt(value)) < 0) {
+                if (balance - parseInt(value) < 0) {
                     valid = false;
                     alert('На счету недостаточно средств для проведения операции!');
                 } else {
-                    localStorage.setItem('balance', balance);
-                    localStorage.setItem('withdraw', withdraw);
                     this.setState({balance: balance - parseInt(value)});
                     this.setState({withdraw: withdraw + parseInt(value)});
                 }
@@ -52,36 +48,41 @@ export default class MoviePage extends Component {
                 this.setState({
                     history: [...this.state.history, newAction],
                 });
-                //localStorage.setItem('history', JSON.stringify(this.state.history));
             }
         } else {
             alert('Введите сумму для проведения операции!');
         }
     };
 
-    componentWillUpdate(){
-        localStorage.setItem('history', JSON.stringify(this.state.history));
+    componentDidUpdate(){
+        localStorage.setItem('stateApp', JSON.stringify(this.state));
     }
 
+    componentDidMount(){
+        if (localStorage.getItem('stateApp')){
+            const {history, balance, deposit, withdraw} = JSON.parse(localStorage.getItem('stateApp'));
+            history.map((action)=>{
+                this.setState(state => {
+                    const history = [...state.history, action];
+                    return {history}
+                });
+            });
+
+            this.setState({
+                balance: balance,
+                deposit: deposit,
+                withdraw: withdraw
+            })
+        }
+    }
 
     render () {
         const {balance, withdraw, deposit, history} = this.state;
         return (
             <div className="dashboard" >
                 <Controls option = {this.setHistory}/>
-                    {localStorage.getItem('history') ? (
-                        <Fragment>
-                            <Balance balance = {localStorage.getItem('balance')} 
-                            withdraw = {localStorage.getItem('withdraw')} 
-                            deposit = {localStorage.getItem('deposit')}/>
-                            <TransactionHistory history = {JSON.parse(localStorage.getItem('history'))}/>
-                        </Fragment>
-                    ) : (
-                        <Fragment>
-                            <TransactionHistory history = {history}/>
-                            <Balance balance = {balance} withdraw = {withdraw} deposit = {deposit}/>
-                        </Fragment>
-                    )}
+                <Balance balance = {balance} withdraw = {withdraw} deposit = {deposit}/>
+                <TransactionHistory history = {history}/>
             </div>
         )
     }
