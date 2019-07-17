@@ -1,9 +1,12 @@
-import React, { Component, Fragment } from 'react';
-import './dashboard.css'
+import React, { Component } from 'react';
+import { toast } from 'react-toastify';
+import shortid from 'shortid'
+
 import Balance from './Balance';
 import Controls from './Controls';
 import TransactionHistory from './TransactionHistory';
-import shortid from 'shortid'
+import './dashboard.css'
+
 
 export default class MoviePage extends Component {
 
@@ -30,7 +33,8 @@ export default class MoviePage extends Component {
                 type = 'Withdrawal';
                 if (balance - parseInt(value) < 0) {
                     valid = false;
-                    alert('На счету недостаточно средств для проведения операции!');
+                    console.log(toast);
+                    toast.error('На счету недостаточно средств для проведения операции!');
                 } else {
                     this.setState({balance: balance - parseInt(value)});
                     this.setState({withdraw: withdraw + parseInt(value)});
@@ -50,7 +54,7 @@ export default class MoviePage extends Component {
                 });
             }
         } else {
-            alert('Введите сумму для проведения операции!');
+            toast.error('Введите сумму для проведения операции!');
         }
     };
 
@@ -61,8 +65,8 @@ export default class MoviePage extends Component {
     componentDidMount(){
         if (localStorage.getItem('stateApp')){
             const {history, balance, deposit, withdraw} = JSON.parse(localStorage.getItem('stateApp'));
-            history.map((action)=>{
-                this.setState(state => {
+            history.map((action) => {
+                return this.setState(state => {
                     const history = [...state.history, action];
                     return {history}
                 });
